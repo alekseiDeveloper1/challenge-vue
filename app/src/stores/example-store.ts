@@ -1,21 +1,29 @@
-import { defineStore, acceptHMRUpdate } from 'pinia';
+import { defineStore } from 'pinia';
+import type {typeOptions} from "src/scripts";
+type TagRecord = {
+  text: string;
+}
+export interface UsersRecords {
+  tags: TagRecord[];
+  typeRecord: typeOptions;
+  login: string;
+  password: string | null;
+  isPwd?: boolean;
+}
 
 export const useCounterStore = defineStore('counter', {
-  state: () => ({
-    counter: 0,
+  state: ():{usersRecords:UsersRecords[]} => ({
+    usersRecords: []
   }),
 
   getters: {
-    doubleCount: (state) => state.counter * 2,
+    state: (state) => [...state.usersRecords],
   },
 
   actions: {
-    increment() {
-      this.counter++;
+    setState(state: UsersRecords[]) {
+
+      this.usersRecords = [...this.usersRecords, ...state];
     },
   },
 });
-
-if (import.meta.hot) {
-  import.meta.hot.accept(acceptHMRUpdate(useCounterStore, import.meta.hot));
-}
