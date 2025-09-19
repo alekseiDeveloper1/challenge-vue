@@ -6,7 +6,13 @@ export const defaultRecord = ():UsersRecords => (
   {
     tags: [],
     typeRecord: 'Локальная',
-    login: '',
-    password: null,
+    login: null,
+    password: null
   }
 )
+export const setLS = (key: string, value: string) => {
+  localStorage.setItem(key, value);
+};
+export const getLS = (key: string) => {
+  return localStorage.getItem(key);
+};

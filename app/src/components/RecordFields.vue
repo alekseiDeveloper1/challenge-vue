@@ -9,8 +9,8 @@
   </thead>
   <tbody v-if="vModal?.length">
 
-  <tr v-for="item in vModal" :key="item.login">
-    <record-items :item="item" @updateStore="updateStore" />
+  <tr v-for="(item, index) in vModal" :key="index">
+    <record-items :item="item" @updateStore="updateStore" @delRecord="delRecord" :keyIndex="index"/>
   </tr>
   </tbody>
 </template>
@@ -25,6 +25,14 @@ const store = useCounterStore()
 onBeforeMount(() => {
   vModal.value = store.state
 })
-const updateStore = () => store.setState(vModal.value ?? []);
+const updateStore = () => {
+  store.setState(vModal.value ?? []);
+}
+
+const delRecord = (index: number) => {
+  if (!vModal.value) return;
+  vModal.value.splice(index, 1);
+  store.setState(vModal.value ?? []);
+}
 
 </script>

@@ -1,14 +1,13 @@
 import { defineStore } from 'pinia';
-import type {typeOptions} from "src/scripts";
+import { getLS, setLS, type typeOptions} from "src/scripts";
 type TagRecord = {
   text: string;
 }
 export interface UsersRecords {
   tags: TagRecord[];
   typeRecord: typeOptions;
-  login: string;
+  login: string | null;
   password: string | null;
-  isPwd?: boolean;
 }
 
 export const useCounterStore = defineStore('counter', {
@@ -17,13 +16,19 @@ export const useCounterStore = defineStore('counter', {
   }),
 
   getters: {
-    state: (state) => [...state.usersRecords],
+    state: (state) =>{
+      const fromLS = getLS('list')
+      if(fromLS) {
+        state.usersRecords = JSON.parse(fromLS)
+      }
+      return [...state.usersRecords]
+    },
   },
 
   actions: {
     setState(state: UsersRecords[]) {
-
-      this.usersRecords = [...this.usersRecords, ...state];
+      this.usersRecords = state;
+      setLS('list', JSON.stringify(this.usersRecords))
     },
   },
 });
